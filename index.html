@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Awesome Cosmos Explorer | 開源宇宙星圖探險儀</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
+</head>
+<body>
+
+  <!-- 3D WebGL Canvas 容器 -->
+  <div id="cosmos-canvas-container"></div>
+
+  <!-- 賽博抬頭顯示器 (HUD UI Layer) -->
+  <div class="hud-layer">
+    
+    <!-- 頂部控制面板 -->
+    <header class="hud-top-bar hud-interactive">
+      <div class="logo-container">
+        <div class="logo-icon">🪐</div>
+        <div class="logo-text">
+          <h1>AWESOME COSMOS</h1>
+          <span>開源宇宙星圖探險儀</span>
+        </div>
+      </div>
+
+      <!-- 快速搜尋與行動按鈕 -->
+      <div class="search-filter-wrap">
+        <input type="text" id="search-input" class="search-input" placeholder="🔍 搜尋開源星體 (如: ollama, godot)...">
+        
+        <div class="hud-btn-group">
+          <button id="warp-btn" class="hud-btn primary" title="隨機曲率跳躍">🚀 曲率跳躍</button>
+          <button id="gacha-btn" class="hud-btn" title="黑洞神器盲盒抽卡">🕳️ 黑洞抽卡</button>
+          <button id="constellation-btn" class="hud-btn" title="查看自訂星座收藏">✨ 星座冊</button>
+          <button id="font-scale-btn" class="hud-btn" title="點擊切換字體大小（適中 / 放大 / 特大）">🔠 字體: 適中</button>
+          <button id="sound-btn" class="hud-btn" title="音頻開關">🔊 宇宙音頻開啟</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 星系分區過濾導覽列 (Sectors) -->
+    <nav id="sector-bar" class="sector-bar hud-interactive"></nav>
+
+    <!-- 底部資訊列 -->
+    <footer class="hud-bottom-bar hud-interactive">
+      <div class="stats-card">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-stars-count">0</span>
+          <span class="stat-label">收錄星體</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">7</span>
+          <span class="stat-label">星域領域</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stat-bookmark-count">0</span>
+          <span class="stat-label">已連線星座</span>
+        </div>
+      </div>
+
+      <div style="font-size:0.75rem; color:var(--text-muted); text-align:right;">
+        <span>滑鼠拖曳旋轉 · 滾輪縮放 · 點擊星體聚焦</span><br>
+        <span style="opacity:0.7;">Powered by Three.js & Cloudflare Drop Ready</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- 浮動星體預覽 Tooltip -->
+  <div id="star-tooltip" class="star-tooltip">
+    <div id="tooltip-name" class="star-tooltip-name"></div>
+    <div id="tooltip-sector" class="star-tooltip-sector"></div>
+  </div>
+
+  <!-- 星體詳情卡片彈窗 (Detail Modal) -->
+  <div id="detail-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <button id="modal-close" class="close-btn">&times;</button>
+      <div id="modal-badge" class="card-badge">SECTOR</div>
+      <h2 id="modal-title" class="card-title">Project Name</h2>
+      <div id="modal-repo" class="card-repo">owner/repo</div>
+      <p id="modal-desc" class="card-desc">Project description goes here...</p>
+      <div id="modal-tags" class="card-tags"></div>
+      <div class="card-actions">
+        <a id="modal-visit" class="action-btn btn-visit" target="_blank" rel="noopener noreferrer">🌐 前往 GitHub 傳送門</a>
+        <button id="modal-warp" class="action-btn hud-btn">🚀 躍遷近軌</button>
+        <button id="modal-bookmark" class="action-btn btn-bookmark">☆ 點亮並連入星座</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引力黑洞抽卡盲盒彈窗 (Gravitational Gacha Modal) -->
+  <div id="gacha-modal" class="modal-backdrop">
+    <div class="modal-card" style="text-align: center;">
+      <button id="gacha-close" class="close-btn">&times;</button>
+      <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--neon-cyan);">🕳️ 引力黑洞神器探測</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">正在扭曲時空，從 GitHub 開源宇宙捕獲未知神器...</p>
+
+      <!-- 旋轉黑洞漩渦特效 -->
+      <div id="gacha-vortex" class="black-hole-vortex">
+        <div style="font-size: 2rem;">⚡</div>
+      </div>
+
+      <!-- 開牌抽卡結果 -->
+      <div id="gacha-card" style="display: none; margin-top: 1.5rem;">
+        <div style="font-size: 0.8rem; color: var(--neon-amber); margin-bottom: 0.25rem;">✨ 捕獲神仙開源寶庫！</div>
+        <h3 id="gacha-title" style="font-family: var(--font-display); font-size: 1.6rem; color: #fff; margin-bottom: 0.5rem;"></h3>
+        <p id="gacha-desc" style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 1.5rem;"></p>
+        <div style="display: flex; gap: 0.75rem;">
+          <a id="gacha-visit" class="action-btn btn-visit" target="_blank" rel="noopener noreferrer">🚀 查看專案</a>
+          <button id="gacha-reroll" class="action-btn hud-btn">🎲 再次探測</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 自訂星座清單抽屜 (Constellation Drawer) -->
+  <aside id="constellation-drawer" class="constellation-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">✨ 我的專屬星座冊</div>
+      <button id="drawer-close" class="close-btn" style="position:static;">&times;</button>
+    </div>
+    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem;">
+      你點亮的星體將在宇宙深空中串聯成發光的星座連線。
+    </div>
+    <div id="drawer-list" class="drawer-list"></div>
+    <button id="export-md-btn" class="hud-btn primary" style="width:100%; justify-content:center; margin-top:1rem;">
+      📄 匯出星座 Markdown
+    </button>
+  </aside>
+
+  <!-- 外部依賴庫 CDN (Three.js + OrbitControls) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- 專案代碼 -->
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/cosmos.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
