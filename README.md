@@ -41,11 +41,11 @@
 - **🔊 純 Web Audio 程序化音效**：瀏覽器即時算力合成科幻環境底噪與琉璃音階，零音訊外鏈依賴。
 - **🔠 動態字體縮放**：支援適中 (17px)、放大 (19.5px) 與特大 (22px) 三段調節，並自動保存喜好。
 
-### ☁️ Cloudflare Pages (Drop) 30 秒無痛發布
+#### ☁️ Cloudflare Pages (Drop) 30 秒無痛發布
 1. 登入 [Cloudflare Dashboard](https://dash.cloudflare.com/)。
 2. 前往 **Workers & Pages** ➜ **Create application** ➜ 選擇 **Pages**。
 3. 點選 **Upload assets (Direct Upload)**。
-4. 將本專案資料夾或 `awesome-cosmos.zip` 直接拖曳進去。
+4. 將本專案資料夾（或從 GitHub 下載的 Zip 壓縮檔）直接拖曳進去。
 5. 點擊 **Deploy site**，立即獲得專屬的 `*.pages.dev` 網址！
 
 ---
@@ -69,7 +69,7 @@
 1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/).
 2. Navigate to **Workers & Pages** ➜ **Create application** ➜ **Pages**.
 3. Select **Upload assets (Direct Upload)**.
-4. Drag and drop this folder or `awesome-cosmos.zip`.
+4. Drag and drop this project folder (or GitHub download zip).
 5. Click **Deploy site** to instantly receive your live `*.pages.dev` URL.
 
 ---
@@ -93,7 +93,7 @@
 1. [Cloudflare Dashboard](https://dash.cloudflare.com/) にログイン。
 2. **Workers & Pages** ➜ **Create application** ➜ **Pages** を選択。
 3. **Upload assets (Direct Upload)** をクリック。
-4. このプロジェクトフォルダまたは `awesome-cosmos.zip` をドラッグ＆ドロップ。
+4. このプロジェクトフォルダ（またはGitHubからダウンロードしたZIP）をドラッグ＆ドロップ。
 5. **Deploy site** をクリックすれば、数秒で専用の `*.pages.dev` サイトが公開されます！
 
 ---
