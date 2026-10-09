@@ -12,6 +12,14 @@
 *An immersive 3D cyberpunk galaxy visualizing legendary GitHub Awesome repositories.*  
 *GitHubの「Awesome」リポジトリ群を3Dサイバー宇宙空間に可視化したインタラクティブ探査ツール。*
 
+<br />
+
+<p align="center">
+  <a href="https://tw365-org.github.io/awesome-cosmos/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/🛸_立刻線上漫遊宇宙_|_LAUNCH_LIVE_EXPLORER-0284c7?style=for-the-badge&logo=rocket&logoColor=white" height="44" alt="Launch Live Explorer">
+  </a>
+</p>
+
 [繁體中文](#-繁體中文) • [English](#-english) • [日本語](#-日本語)
 
 </div>
